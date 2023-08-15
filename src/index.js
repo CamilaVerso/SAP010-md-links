@@ -8,3 +8,5 @@ mdLinks('README.md')
   .catch(err => {
     console.error('Erro:', err);
   })
+
+module.exports = mdLinks;

@@ -5,7 +5,7 @@ const path = require('path');
 function mdLinks(filePath) {
 	return new Promise((resolve, reject) => {
 		const absolutePath = path.resolve(filePath); // transforma a rota em absoluta
-
+		
 		fs.stat(absolutePath) // Verifica se o caminho existe
 			.then((stats) => {
 				if (stats.isFile() && ['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(absolutePath))) {
@@ -20,7 +20,7 @@ function mdLinks(filePath) {
 								const links = matches.map((match) => {
 									const href = match.replace(regex, '$2').trim();
 									const text = match.replace(regex, '$1').trim();
-									return { href, text };
+									return { href, text, file: absolutePath }; // incluir aqui o item file
 								});
 
 								resolve(links);

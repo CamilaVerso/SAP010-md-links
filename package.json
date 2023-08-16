@@ -15,7 +15,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -37,8 +37,6 @@
   "homepage": "https://github.com/CamilaVerso/SAP010-md-links#readme",
   "devDependencies": {
     "jest": "^29.6.2"
-  },
-  "dependencies": {
-    "markdown-link-extractor": "^3.1.0"
   }
+
 }

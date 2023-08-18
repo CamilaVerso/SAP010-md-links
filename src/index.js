@@ -1,7 +1,8 @@
+const validate = require('./main');
 const mdLinks = require('./main');
 
 
-mdLinks('README.md')
+mdLinks('README.md', validate)
   .then(links => {
     console.log('Links encontrados:', links);
   })

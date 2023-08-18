@@ -1,29 +1,51 @@
 const fs = require('fs').promises;
 const path = require('path');
+const axios = require('axios');
 
-
-function mdLinks(filePath) {
+function mdLinks(filePath, validate = false) {
 	return new Promise((resolve, reject) => {
-		const absolutePath = path.resolve(filePath); // transforma a rota em absoluta
-		
-		fs.stat(absolutePath) // Verifica se o caminho existe
+		const absolutePath = path.resolve(filePath);
+
+		fs.stat(absolutePath)
 			.then((stats) => {
 				if (stats.isFile() && ['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(absolutePath))) {
-					// O arquivo é Markdown
-
-					fs.readFile(absolutePath, 'utf8') // lê o arquivo 
+					fs.readFile(absolutePath, 'utf8')
 						.then((content) => {
 							const regex = /\[([^[\]]+)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)/g;
-							const matches = content.match(regex); // encontra o link
+							const matches = content.match(regex);
 
 							if (matches) {
 								const links = matches.map((match) => {
 									const href = match.replace(regex, '$2').trim();
 									const text = match.replace(regex, '$1').trim();
-									return { href, text, file: absolutePath }; // incluir aqui o item file
+									return { href, text, file: absolutePath };
 								});
 
-								resolve(links);
+								if (!validate) {
+									resolve(links);
+								} else {
+									const linkPromises = links.map(link => {
+										return axios.head(link.href)
+											.then(response => ({
+												...link,
+												status: response.status,
+												ok: response.status >= 200 && response.status < 400 ? 'ok' : 'fail',
+											}))
+											.catch(error => ({
+												...link,
+												status: error.response ? error.response.status : 'N/A',
+												ok: 'fail',
+											}));
+									});
+
+									Promise.all(linkPromises)
+										.then(validatedLinks => {
+											resolve(validatedLinks);
+										})
+										.catch(error => {
+											reject(new Error('Erro ao validar os links.'));
+										});
+								}
 							} else {
 								resolve([]);
 							}
@@ -41,6 +63,51 @@ function mdLinks(filePath) {
 	});
 }
 
-
-
 module.exports = mdLinks;
+
+// const fs = require('fs').promises;
+// const path = require('path');
+
+
+// function mdLinks(filePath) {
+// 	return new Promise((resolve, reject) => {
+// 		const absolutePath = path.resolve(filePath); // transforma a rota em absoluta
+		
+// 		fs.stat(absolutePath) // Verifica se o caminho existe
+// 			.then((stats) => {
+// 				if (stats.isFile() && ['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(absolutePath))) {
+// 					// O arquivo é Markdown
+
+// 					fs.readFile(absolutePath, 'utf8') // lê o arquivo 
+// 						.then((content) => {
+// 							const regex = /\[([^[\]]+)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)/g;
+// 							const matches = content.match(regex); // encontra o link
+
+// 							if (matches) {
+// 								const links = matches.map((match) => {
+// 									const href = match.replace(regex, '$2').trim();
+// 									const text = match.replace(regex, '$1').trim();
+// 									return { href, text, file: absolutePath }; // incluir aqui o item file
+// 								});
+
+// 								resolve(links);
+// 							} else {
+// 								resolve([]);
+// 							}
+// 						})
+// 						.catch((error) => {
+// 							reject(new Error('Erro ao ler o conteúdo do arquivo.'));
+// 						});
+// 				} else {
+// 					reject(new Error('O arquivo não é do tipo Markdown.'));
+// 				}
+// 			})
+// 			.catch((error) => {
+// 				reject(new Error('A rota inserida não é válida.'));
+// 			});
+// 	});
+// }
+
+
+
+// module.exports = mdLinks;

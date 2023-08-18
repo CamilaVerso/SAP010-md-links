@@ -15,7 +15,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage"    
+    
   },
   "repository": {
     "type": "git",

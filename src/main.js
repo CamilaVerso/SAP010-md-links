@@ -43,12 +43,34 @@ function validateMarkdownLinks(links) {
 function readDirectory(directoryPath) {
 	return fs.readdir(directoryPath)
 		.then(files => {
-			const mdFiles = files.filter(file => ['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(file)));
-			const filePromises = mdFiles.map(mdFile => readMarkdownFile(path.join(directoryPath, mdFile))); // aqui estou unindo as rotas
+			const filePromises = files.map(file => {
+				const fullPath = path.join(directoryPath, file);
+				return fs.stat(fullPath)
+					.then(stats => {
+						if (stats.isDirectory()) {
+							// Se for um diretório, chama readDirectory recursivamente
+							return readDirectory(fullPath);
+						} else if (['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(file))) {
+							return readMarkdownFile(fullPath);
+						}
+						return []; // Retorna um array vazio para outros tipos de arquivos
+					});
+			});
+
 			return Promise.all(filePromises)
 				.then(fileLinks => fileLinks.flat());
 		});
 }
+
+// function readDirectory(directoryPath) {
+// 	return fs.readdir(directoryPath)
+// 		.then(files => {
+// 			const mdFiles = files.filter(file => ['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(file)));
+// 			const filePromises = mdFiles.map(mdFile => readMarkdownFile(path.join(directoryPath, mdFile))); // aqui estou unindo as rotas
+// 			return Promise.all(filePromises)
+// 				.then(fileLinks => fileLinks.flat());
+// 		});
+// }
 
 function mdLinks(filePath, validate = false) {
 	const absolutePath = path.resolve(filePath);

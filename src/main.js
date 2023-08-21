@@ -72,6 +72,11 @@ function readDirectory(directoryPath) {
 // 		});
 // }
 
+function calculateBrokenLinks(links) {
+	const brokenLinksCount = links.filter(link => link.ok === 'fail').length;
+	return brokenLinksCount;
+}
+
 function mdLinks(filePath, validate = false) {
 	const absolutePath = path.resolve(filePath);
 

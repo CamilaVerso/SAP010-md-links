@@ -2,7 +2,6 @@
 
 const path = require('path');
 const mdLinks = require('./main');
-const calculateBrokenLinks = require('./main');
 
 const args = process.argv.slice(2); // remove os 2 primeiros argumentos e me retorna só o caminho
 
@@ -23,13 +22,14 @@ if (pathArg) {
 			const broken = links.filter(link => link.ok === 'fail').length;
 			console.log(`Total de links: ${totalLinks}`);
 			console.log(`Links únicos: ${uniqueLinks}`);
-			console.log(`Links quebrados: ${broken}`)
+			console.log(`Links quebrados: ${broken}`);
 		} else {
 			links.forEach(link => {
-				const statusInfo = options.validate ? `[${link.ok === 'ok' ? 'OK' : 'FAIL'} ] ${link.status}` : '';
-				console.log(`${link.href} ${statusInfo}`);
-				console.log(`Arquivo: ${link.file}`);
-				console.log(`Texto: ${link.text}`);
+				console.log(`href: ${link.href}`);
+				console.log(`Text: ${link.text}`);
+				console.log(`File: ${link.file}`);
+				console.log(`Status: ${link.status}`);
+				console.log(`Ok: ${link.ok}`);
 				console.log('---');
 			});
 		}
@@ -39,3 +39,11 @@ if (pathArg) {
 } else {
 	console.error('Uso: md-links <path-to-file> [--validate] [--stats]');
 }
+// const statusInfo = options.validate ? `[${link.ok === 'ok' ? 'OK' : 'FAIL'} ] ${link.status}` : '';
+				
+
+
+				// console.log(`${link.href} ${statusInfo}`);
+				// console.log(`Arquivo: ${link.file}`);
+				// console.log(`Texto: ${link.text}`);
+				// console.log('---');

@@ -1,4 +1,4 @@
-// const mdLinks = require('./main');
+// const { mdLinks } = require('./main');
 // const validate = true; 
 
 // mdLinks('arquivos', validate)

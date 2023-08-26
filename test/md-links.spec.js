@@ -1,9 +1,9 @@
-const { it } = require('node:test');
-const { validateLink, extractLinks, readMarkdownFile, validateMarkdownLinks, mdLinks, readDirectory } = require('../src/main.js');
+const { validateLink, extractLinks, readMarkdownFile, validateMarkdownLinks, mdLinks } = require('../src/main.js');
 const fs = require('fs').promises;
 const axios = require('axios');
 
 jest.mock('axios');
+jest.mock('fs').promises;
 
 describe('validateLink', () => {
   it('deve validar um link válido', () => {
@@ -123,15 +123,6 @@ describe('validateMarkdownLinks', () => {
       { href: 'https://www.facebook.com', text: 'Facebook', file: '/path/to/file.md', status: 404, ok: 'fail' }
     ];
 
-    const mockValidateLink = jest.fn(link => {
-      if (link.href === 'https://www.google.com') {
-        return Promise.resolve({ status: 200, ok: 'ok' });
-      } else {
-        return Promise.resolve({ status: 404, ok: 'fail' });
-      }
-    });
-    const linkPromises = links.map(link => mockValidateLink(link));
-
     jest.spyOn(Promise, 'all').mockResolvedValue(mockValidatedLinks);
 
     return validateMarkdownLinks(links).then(result => {
@@ -140,62 +131,30 @@ describe('validateMarkdownLinks', () => {
   });
 });
 
+
 describe('mdLinks', () => {
-  test('deve retornar um array de links', () => {
-    return mdLinks('src/README.md')
+  it('deve retornar um array de links', () => {
+    return mdLinks('test/comLinks.md')
       .then(links => {
         expect(Array.isArray(links)).toBe(true);
-        // expect(links.length).toBeGreaterThan(0);
+      });
+    });
+  });
 
+  it('deve ler um diretório', () => {
+    return mdLinks('test/arquivos')
+      .then(links => {
+        expect(Array.isArray(links)).toBe(true);
       });
   });
 
-  test('deve rejeitar a promessa quando o arquivo não é do tipo Markdown', () => {
+  it('deve rejeitar a promessa quando o arquivo não é do tipo Markdown', () => {
     return expect(mdLinks('teste.txt')).rejects.toThrow('Erro ao verificar o arquivo/nome de diretório.');
-  });// não apagar este teste
-
   });
-test('deve rejeitar a promessa quando o arquivo não é .md', () => {
+
+it('deve rejeitar a promessa quando o arquivo não é .md', () => {
   return mdLinks('test/teste.txt')
     .catch(error => {
       expect(error.message).toBe('Erro ao verificar o arquivo/nome de diretório.');
-    }); // Não apagar este teste
+    });
 });
-
-
-
-
-  // test('deve rejeitar a promessa quando o arquivo não tem links', () => {
-  //   return mdLinks('../test/teste.md')
-  //     .catch(error => {
-  //       expect(error.message).toEqual('Nenhum link encontrado no arquivo.'); //Erro ao ler o conteúdo do arquivo.
-  //     }); // este teste passa mas não conta na cobertura porque o erro é genérico, preciso arrumar a função para dar o erro correto 
-  // });
-
-
-  // test('deve rejeitar a promessa quando o arquivo não é do tipo Markdown', () => {
-  //   return expect(mdLinks('teste.txt')).rejects.toThrow('A rota inserida não é válida.');
-  // });
-
-  // test('deve rejeitar a promessa quando não consegue ler o conteúdo do arquivo', () => {
-  //   return mdLinks('../test/teste2.md')
-  //     .catch(error => {
-  //       expect(error.message).toBe('Erro ao ler o conteúdo do arquivo.');
-  //     });
-  // });
-
-
-  // test('deve rejeitar a promessa quando o arquivo não é .md', () => {
-  //   return mdLinks('../test/teste.txt')
-  //     .catch(error => {
-  //       expect(error.message).toBe('A rota inserida não é válida.'); //O arquivo não é do tipo Markdown.
-  //     });
-  // });
-
-  // test('deve imprimir mensagem de erro conteúdo inexistente', () => {
-  //   return mdLinks('caminho/inexistente.md')
-  //     .catch(error => {
-  //       expect(error.message).toBe('A rota inserida não é válida.');
-  //     });
-  // });
-

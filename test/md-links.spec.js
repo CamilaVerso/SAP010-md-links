@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+// const mock = require('mock-fs');
 
 // const fsPromises = require('fs').promises;
 // const mainModule = require ('../src/main.js')
@@ -148,6 +149,85 @@ describe('validateMarkdownLinks', () => {
   });
 });
 
+
+
+describe('mdLinks', () => {
+  // afterEach(() => {
+  //   mock.restore(); // Restaurar o sistema de arquivos original após cada teste
+  // });
+
+  it('deve retornar links de um arquivo Markdown', () => {
+   
+    // mock({
+    //   'arquivo.md': `
+    //     [Google](https://www.google.com)
+    //     [Facebook](https://www.facebook.com)
+    //   `
+    // });
+
+    // Chamando a função mdLinks
+    return mdLinks('test/testar').then(result => {
+      
+      const expectedLinks = [
+        // { href: 'https://www.google.com', text: 'Google', file: 'test/arquivo.md' },
+        // { href: 'https://www.facebook.com', text: 'Facebook', file: 'test/arquivo.md' }
+        { file: '/patch/to/file.md', href: 'https://www.google.com', ok: 'ok', status: '200', text: 'Google', },
+        { file: '/patch/to/file.md', href: 'https://www.facebook.com', ok: 'fail', status: '404', text: 'Facebook', }
+        // { file: '/patch/to/file.md', status: '200', },
+        // { file: '/patch/to/file.md', status: '404', },
+      ];
+      expect(result).toBe(expectedLinks);
+    });
+  });
+});
+
+// describe('mdLinks', () => {
+  test('deve retornar um array de links', () => {
+    return mdLinks('test/teste.md')
+      .then(links => {
+        expect(Array.isArray(links)).toBe(true);
+        // expect(links.length).toBeGreaterThan(0);
+
+      });
+  });
+
+
+  test('deve rejeitar a promessa quando o arquivo não é do tipo Markdown', () => {
+    return expect(mdLinks('teste.txt')).rejects.toThrow('Erro ao verificar o arquivo/nome de diretório.');
+  }); // não apagar este teste
+
+  test('deve rejeitar a promessa quando não consegue ler o conteúdo do arquivo', () => {
+    return mdLinks('../test/teste2.md')
+      .catch(error => {
+        expect(error.message).toBe('Erro ao verificar o arquivo/nome de diretório.'); // Erro ao ler o arquivo. Detalhes: Erro ao verificar o arquivo/nome de diretório.Erro ao verificar o arquivo/nome de diretório.
+      });
+  }); // Este teste passa, mas não interfere na cobertura
+
+
+  test('deve rejeitar a promessa quando o arquivo não é .md', () => {
+    return mdLinks('test/teste.txt')
+      .catch(error => {
+        expect(error.message).toBe('Erro ao verificar o arquivo/nome de diretório.');
+      }); // Não apagar este teste
+  });
+
+  // test('deve imprimir mensagem de erro conteúdo inexistente', () => {
+  //   return mdLinks('caminho/inexistente.md')
+  //     .catch(error => {
+  //       expect(error.message).toBe('Erro ao verificar o arquivo/nome de diretório.');
+  //     }); //A rota inserida não é válida.
+  // }); // Este teste passa, mas não interfere na cobertura
+
+  
+  // test('deve rejeitar a promessa quando o arquivo não tem links', () => {
+  //   return mdLinks('src/vazio.md')
+  //     .catch(error => {
+  //       expect(error.message).toThrow('Erro ao ler o conteúdo do arquivo.'); //Erro ao ler o conteúdo do arquivo.
+  //     });
+  // }); Este teste passa, mas não interfere na cobertura
+
+// });
+
 // describe('mdLinks', () => {
 //   it('deve retornar links de um arquivo Markdown', () => {
 //     // Mockando fs.promises.stat para retornar stats de arquivo
@@ -172,41 +252,42 @@ describe('validateMarkdownLinks', () => {
 
 // });
 
-describe('mdLinks', () => {
-  beforeEach(() => {
-    fs.readFile = jest.fn();
-    fs.readdir = jest.fn();
-    fs.stat = jest.fn();
-  });
+// describe('mdLinks', () => {
+//   beforeEach(() => {
+//     fs.promises.readFile = jest.fn();
+//     fs.promises.readdir = jest.fn();
+//     fs.promises.stat = jest.fn();
+//   });
 
-  afterEach(() => {
-    fs.readFile.mockRestore();
-    fs.readdir.mockRestore();
-    fs.stat.mockRestore();
-  });
+//   afterEach(() => {
+//     fs.promises.readFile.mockRestore();
+//     fs.promises.readdir.mockRestore();
+//     fs.promises.stat.mockRestore();
+//   });
 
-  it('deve retornar links de um arquivo Markdown', () => {
-    const mockStat = fs.stat;
-    // Mockando fs.promises.stat para retornar stats de arquivo
-    mockStat.mockResolvedValue({ isFile: () => true });
+//   it('deve retornar links de um arquivo Markdown', () => {
+//     const mockStat = fs.promises.stat;
+//     // Mockando fs.promises.stat para retornar stats de arquivo
+//     mockStat.mockResolvedValue({ isFile: () => true });
 
-    // Mockando fs.promises.readFile para retornar conteúdo de arquivo
-    const mockContent = `
-      [Google](https://www.google.com)
-      [OpenAI](https://www.openai.com)
-    `;
-    fs.readFile = jest.fn(() => Promise.resolve(mockContent)); // Mock diretamente aqui
+//     // Mockando fs.promises.readFile para retornar conteúdo de arquivo
+//     const mockContent = `
+//       [Google](https://www.google.com)
+//       [OpenAI](https://www.openai.com)
+//     `;
+//     fs.promises.readFile.mockResolvedValue(mockContent); // Usar mockResolvedValue para funções assíncronas
 
-    // Chamando a função mdLinks
-    return mdLinks('arquivo.md').then(result => {
-      const expectedLinks = [
-        { href: 'https://www.google.com', text: 'Google', file: 'arquivo.md' },
-        { href: 'https://www.openai.com', text: 'OpenAI', file: 'arquivo.md' }
-      ];
-      expect(result).toEqual(expectedLinks);
-    });
-  });
-});
+
+//     // Chamando a função mdLinks
+//     return mdLinks('arquivo.md').then(result => {
+//       const expectedLinks = [
+//         { href: 'https://www.google.com', text: 'Google', file: 'arquivo.md' },
+//         { href: 'https://www.openai.com', text: 'OpenAI', file: 'arquivo.md' }
+//       ];
+//       expect(result).toEqual(expectedLinks);
+//     });
+//   });
+// });
 
 // describe('mdLinks', () => {
 //   const mockReadFile = jest.spyOn(fs.promises, 'readFile');
@@ -369,53 +450,4 @@ describe('mdLinks', () => {
 //     });
 //   });
 // });
-
-
-
-
-// const mdLinks = require('../src/index.js');
-
-// describe('mdLinks', () => {
-//   test('deve retornar um array de links', () => {
-//     return mdLinks('src/README.md')
-//       .then(links => {
-//         expect(Array.isArray(links)).toBe(true);
-//         expect(links.length).toBeGreaterThan(0);
-        
-//       });
-//   });
-
-//   test('deve rejeitar a promessa quando o arquivo não tem links', () => {
-//     return mdLinks('src/vazio.md')
-//       .catch(error => {
-//         expect(error.message).toThrow('Erro ao ler o conteúdo do arquivo.'); //Erro ao ler o conteúdo do arquivo.
-//       });
-//   });
-
-//   test('deve rejeitar a promessa quando o arquivo não é do tipo Markdown', () => {
-//     return expect(mdLinks('teste.txt')).rejects.toThrow('Erro ao verificar o arquivo/nome de diretório.');
-//   });
-
-//   test('deve rejeitar a promessa quando não consegue ler o conteúdo do arquivo', () => {
-//     return mdLinks('../test/teste2.md')
-//       .catch(error => {
-//         expect(error.message).toBe('Erro ao verificar o arquivo/nome de diretório.'); // Erro ao ler o arquivo. Detalhes: Erro ao verificar o arquivo/nome de diretório.Erro ao verificar o arquivo/nome de diretório.
-//       });
-//   });
-
-
-//   test('deve rejeitar a promessa quando o arquivo não é .md', () => {
-//     return mdLinks('../test/teste.txt')
-//       .catch(error => {
-//         expect(error.message).toBe('A rota inserida não é válida.'); //O arquivo não é do tipo Markdown.
-//       });
-//   });
-
-//   test('deve imprimir mensagem de erro conteúdo inexistente', () => {
-//     return mdLinks('caminho/inexistente.md')
-//       .catch(error => {
-//         expect(error.message).toBe('A rota inserida não é válida.');
-//       });
-//   });
-
-// });
+ 

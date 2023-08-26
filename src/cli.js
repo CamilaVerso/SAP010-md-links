@@ -3,7 +3,7 @@
 const path = require('path');
 const { mdLinks } = require('./main');
 
-const args = process.argv.slice(2); // remove os 2 primeiros argumentos e me retorna só o caminho
+const args = process.argv.slice(2);
 
 const options = {
 	validate: args.includes('--validate'),
@@ -18,7 +18,6 @@ if (pathArg) {
 		if (options.stats) {
 			const totalLinks = links.length;
 			const uniqueLinks = new Set(links.map(link => link.href)).size;
-			// const broken = calculateBrokenLinks().length;
 			const broken = links.filter(link => link.ok === 'fail').length;
 			console.log(`Total de links: ${totalLinks}`);
 			console.log(`Links únicos: ${uniqueLinks}`);

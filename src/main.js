@@ -55,12 +55,6 @@ function readMarkdownFile(absolutePath) {
 });
 }
 
-// function readMarkdownFile(absolutePath) {
-// 	return fs.readFile(absolutePath, 'utf8')
-// 		.then(content => extractLinks(content, absolutePath))
-// 		.catch(() => []);
-// }
-
 function validateMarkdownLinks(links) {
 	const linkPromises = links.map(link => validateLink(link));
 	return Promise.all(linkPromises);
@@ -74,12 +68,11 @@ function readDirectory(directoryPath) {
 				return fs.stat(fullPath)
 					.then(stats => {
 						if (stats.isDirectory()) {
-							// Se for um diretório, chama readDirectory recursivamente
 							return readDirectory(fullPath);
 						} else if (['.md', '.mkd', '.mdwn', '.mdown', '.mdtxt', '.mdtext', '.markdown', '.text'].includes(path.extname(file))) {
 							return readMarkdownFile(fullPath);
 						}
-						return []; // Retorna um array vazio para outros tipos de arquivos
+						return [];
 					});
 			});
 
@@ -87,11 +80,6 @@ function readDirectory(directoryPath) {
 				.then(fileLinks => fileLinks.flat());
 		});
 }
-
-// function calculateBrokenLinks(links) {
-// 	const brokenLinksCount = links.filter(link => link.ok === 'fail').length;
-// 	return brokenLinksCount;
-// }
 
 function mdLinks(filePath, validate = false) {
 	const absolutePath = path.resolve(filePath);

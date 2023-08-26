@@ -31,9 +31,24 @@ function extractLinks(content, filePath) {
 
 function readMarkdownFile(absolutePath) {
 	return fs.readFile(absolutePath, 'utf8')
-		.then(content => extractLinks(content, absolutePath))
-		.catch(() => []);
+		.then(content => {
+			const links = extractLinks(content, absolutePath);
+			if (links.length === 0) {
+				console.log('Nenhum link encontrado no arquivo.');
+			}
+			return links;
+		})
+		.catch((error) => {
+			console.error(`Erro ao ler o arquivo. Detalhes: ${error.message}`);
+			return [];
+		});
 }
+
+// function readMarkdownFile(absolutePath) {
+// 	return fs.readFile(absolutePath, 'utf8')
+// 		.then(content => extractLinks(content, absolutePath))
+// 		.catch(() => []);
+// }
 
 function validateMarkdownLinks(links) {
 	const linkPromises = links.map(link => validateLink(link));
@@ -72,10 +87,10 @@ function readDirectory(directoryPath) {
 // 		});
 // }
 
-function calculateBrokenLinks(links) {
-	const brokenLinksCount = links.filter(link => link.ok === 'fail').length;
-	return brokenLinksCount;
-}
+// function calculateBrokenLinks(links) {
+// 	const brokenLinksCount = links.filter(link => link.ok === 'fail').length;
+// 	return brokenLinksCount;
+// }
 
 function mdLinks(filePath, validate = false) {
 	const absolutePath = path.resolve(filePath);
@@ -109,7 +124,7 @@ function mdLinks(filePath, validate = false) {
 		});
 }
 
-module.exports = mdLinks;
+module.exports = { mdLinks, validateLink, extractLinks, readMarkdownFile, readDirectory, validateMarkdownLinks };
 
 // function mdLinks(filePath, validate = false) {
 // 	const absolutePath = path.resolve(filePath);

@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 const path = require('path');
-const mdLinks = require('./main');
-const calculateBrokenLinks = require('./main');
+const { mdLinks } = require('./main');
 
 const args = process.argv.slice(2); // remove os 2 primeiros argumentos e me retorna só o caminho
 

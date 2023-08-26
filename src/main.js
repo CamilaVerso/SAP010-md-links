@@ -42,6 +42,17 @@ function readMarkdownFile(absolutePath) {
 			console.error(`Erro ao ler o arquivo. Detalhes: ${error.message}`);
 			return [];
 		});
+		.then(content => {
+			const links = extractLinks(content, absolutePath);
+			if (links.length === 0) {
+				console.log('Nenhum link encontrado no arquivo.');
+			}
+			return links;
+		})
+		.catch((error) => {
+			console.error(`Erro ao ler o arquivo. Detalhes: ${error.message}`);
+			return [];
+});
 }
 
 function validateMarkdownLinks(links) {

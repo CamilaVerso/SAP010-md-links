@@ -1,23 +1,25 @@
 # Markdown Links
 
+[md-links-cnpg](https://www.npmjs.com/package/md-links-cnpg)
+
 ## Índice
 
 * [1. Prefácio](#1-prefácio)
 * [2. Objetivo](#2-objetivo)
-* [3. Interface](#3-Interface)
-  *[3.1.1 Parâmetros](#311-parâmetros)
-    *[3.1.2 Valor de Retorno](#312-valor-de-retorno)
+* [3. Interface](#3-interface)
+  * [3.1.1 Parâmetros](#311-parâmetros)
+  * [3.1.2 Valor de Retorno](#312-valor-de-retorno)
 * [4. Instalação](#4-instalação)
 * [5. Guia de Uso](#5-guia-de-uso)
-  * [5.1. Informando o caminho (path)](#51-informando-o-caminho-(path))
-     * [5.1.1. Fluxograma](#511-fluxograma)
-     *[5.2. Informando o caminho e a opção --validate](#52-informando-o-caminho-e-a-opção---validate)
-      *[5.2.1. Fluxograma](#521-fluxograma)
-      *[5.3. Informando o path e --stats](#53-informando-o-path-e---stats)
-      *[5.4. Informando o path, --stats e --validate](#54-informando-o-path---stats-e---validate)
-      *[5.4.1. Fluxograma](#541-fluxograma)
+  * [5.1. Informando somente o caminho do arquivo](#51-informando-somente-o-caminho-do-arquivo)
+  * [5.1.1. Fluxograma](#511-fluxograma)
+  * [5.2. Informando o caminho e a opção --validate](#52-informando-o-caminho-e-a-opção---validate)
+  * [5.2.1. Fluxograma](#521-fluxograma)
+  * [5.3. Informando o path e --stats](#53-informando-o-path-e---stats)
+  * [5.4. Informando o path, --stats e --validate](#54-informando-o-path---stats-e---validate)
+  * [5.4.1. Fluxograma](#541-fluxograma)
 * [6. Cobertura dos Testes](#6-cobertura-de-testes)
-* [7. Contato](#8-contato)
+* [7. Contato](#7-contato)
 
 
 ***
@@ -89,7 +91,7 @@ Com os parâmetros: `path`, `--validate` e `--stats`:
 Para começar a usar o `md-links-cnpg`, você precisa tê-lo instalado no seu projeto. Para fazer isso, abra o terminal e execute o seguinte comando:
 
 ```sh
-$ npm install md-links-cnpg
+$ npm i md-links-cnpg
 ```
 **Pré-requisitos:**
 
@@ -102,7 +104,7 @@ A lib deve ser usada no terminal via linha de comando, recomendamos a utilizaç�
 
 Existem quatro formas de buscar por links dentro de arquivos `.md` usando esta lib, são elas:
 
-### 5.1. Informando somente o caminho (path)
+### 5.1. Informando somente o caminho do arquivo
 
 O Markdown Links utiliza o comando md-links para fazer a busca e recebe como parâmetro o `path` absoluto ou relativo.
 
@@ -111,7 +113,7 @@ Exemplo de utilização do comando:
 ```sh
 $ md-links <path-to-file>
 ```
-Sendo que em  <path-to-file> você insere o caminho do arquivo que deseja analisar 
+Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
 Exemplo de retorno que será exibido no terminal:
 
@@ -139,7 +141,7 @@ Exemplo de utilização do comando:
 ```sh
 $ md-links <path-to-file> --validate
 ```
-Sendo que em  <path-to-file> você insere o caminho do arquivo que deseja analisar 
+Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
 Exemplo de retorno que será exibido no terminal:
 
@@ -171,6 +173,7 @@ Exemplo de utilização do comando:
 ```sh
 $ md-links <path-to-file> --stats
 ```
+Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
 Exemplo de retorno que será exibido no terminal:
 
@@ -186,6 +189,7 @@ Exemplo de utilização do comando:
 ```sh
 $ md-links <path-to-file> --validate --stats
 ```
+Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
 Exemplo de retorno que será exibido no terminal:
 
@@ -200,7 +204,7 @@ Links quebrados: 1
 
 **Pré-requisito:** inserir um path válido.
 
-![Diagrama3](./images/diagrama3.png)
+![Diagrama3](./imagens/Diagrama3.jpeg)
 
 ### 6. Cobertura de Testes
 

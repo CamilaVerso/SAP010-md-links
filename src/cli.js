@@ -19,16 +19,20 @@ if (pathArg) {
 			const totalLinks = links.length;
 			const uniqueLinks = new Set(links.map(link => link.href)).size;
 			const broken = links.filter(link => link.ok === 'fail').length;
+			const infoBroken = options.validate ? `Links quebrados: ${broken}`: '';
 			console.log(`Total de links: ${totalLinks}`);
 			console.log(`Links únicos: ${uniqueLinks}`);
-			console.log(`Links quebrados: ${broken}`)
+			console.log(`${infoBroken}`);
 		} else {
 			links.forEach(link => {
-				const statusInfo = options.validate ? `[${link.ok === 'ok' ? 'OK' : 'FAIL'} ] ${link.status}` : '';
-				console.log(`${link.href} ${statusInfo}`);
-				console.log(`Arquivo: ${link.file}`);
+				const statusInfo = options.validate ? `Status: ${link.status}` : '';
+				const Ok = options.validate ? `Ok: ${link.ok === 'ok' ? 'OK' : 'FAIL'}`: '';
+				console.log(`href: ${link.href}`);				
 				console.log(`Texto: ${link.text}`);
-				console.log('---');
+				console.log(`Arquivo: ${link.file}`);
+				console.log(`${ statusInfo }`);
+				console.log(`${ Ok }`);
+				console.log('-----');
 			});
 		}
 	}).catch(err => {

@@ -19,17 +19,20 @@ if (pathArg) {
 			const totalLinks = links.length;
 			const uniqueLinks = new Set(links.map(link => link.href)).size;
 			const broken = links.filter(link => link.ok === 'fail').length;
+			const infoBroken = options.validate ? `Links quebrados: ${broken}`: '';
 			console.log(`Total de links: ${totalLinks}`);
 			console.log(`Links únicos: ${uniqueLinks}`);
-			console.log(`Links quebrados: ${broken}`);
+			console.log(`${infoBroken}`);
 		} else {
 			links.forEach(link => {
-				console.log(`href: ${link.href}`);
-				console.log(`Text: ${link.text}`);
-				console.log(`File: ${link.file}`);
-				console.log(`Status: ${link.status}`);
-				console.log(`Ok: ${link.ok}`);
-				console.log('---');
+				const statusInfo = options.validate ? `Status: ${link.status}` : '';
+				const Ok = options.validate ? `Ok: ${link.ok === 'ok' ? 'OK' : 'FAIL'}`: '';
+				console.log(`href: ${link.href}`);				
+				console.log(`Texto: ${link.text}`);
+				console.log(`Arquivo: ${link.file}`);
+				console.log(`${ statusInfo }`);
+				console.log(`${ Ok }`);
+				console.log('-----');
 			});
 		}
 	}).catch(err => {
@@ -38,11 +41,3 @@ if (pathArg) {
 } else {
 	console.error('Uso: md-links <path-to-file> [--validate] [--stats]');
 }
-// const statusInfo = options.validate ? `[${link.ok === 'ok' ? 'OK' : 'FAIL'} ] ${link.status}` : '';
-				
-
-
-				// console.log(`${link.href} ${statusInfo}`);
-				// console.log(`Arquivo: ${link.file}`);
-				// console.log(`Texto: ${link.text}`);
-				// console.log('---');

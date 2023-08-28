@@ -111,7 +111,7 @@ O Markdown Links utiliza o comando md-links para fazer a busca e recebe como par
 Exemplo de utilização do comando:
 
 ```sh
-$ md-links <path-to-file>
+$ npx md-links-cnpg <path-to-file>
 ```
 Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
@@ -139,7 +139,7 @@ Arquivo: path/arquivo.md
 Exemplo de utilização do comando:
 
 ```sh
-$ md-links <path-to-file> --validate
+$ npx md-links-cnpg <path-to-file> --validate
 ```
 Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
@@ -171,7 +171,7 @@ Ok: FAIL
 Exemplo de utilização do comando:
 
 ```sh
-$ md-links <path-to-file> --stats
+$ npx md-links-cnpg <path-to-file> --stats
 ```
 Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
@@ -187,7 +187,7 @@ Links únicos: 2
 Exemplo de utilização do comando:
 
 ```sh
-$ md-links <path-to-file> --validate --stats
+$ npx md-links-cnpg <path-to-file> --validate --stats
 ```
 Sendo que em  `<path-to-file>` você insere o caminho do arquivo que deseja analisar 
 
